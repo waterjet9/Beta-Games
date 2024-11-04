@@ -22,11 +22,11 @@ jobs:
     #   run: .\ngrok\ngrok.exe tcp 3389
 
     - name: Enable TS
-      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
     - name: Enable Firewall Rule
       run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
     - name: Enable User Auth
-      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
     - name: Set Local User Password
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText $Env:ADMIN_PASSWORD -Force)
       env:
@@ -41,7 +41,9 @@ jobs:
       run: Invoke-WebRequest https://download.reemo.io/reemo.setup.x64.exe -OutFile reemo.setup.x64.exe
     
     - name: Install Reemo
-      run: .\reemo.setup.x64.exe 
+      run: |
+        .\reemo.setup.x64.exe /quiet /norestart
+        Start-Sleep -Seconds 20
 
     - name: Create and Modify Reemo Configuration
       run: |
@@ -49,12 +51,12 @@ jobs:
         if (-Not (Test-Path $configPath)) {
             New-Item -ItemType File -Path $configPath
         }
-        Add-Content -Path $configPath -Value "[auth]`token-$Env:REMIO_KEY"
+        Add-Content -Path $configPath -Value "[auth]`ntoken-$Env:REMIO_KEY"
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
 
-    - name: Start Reemo Service
-      run: Start-Service -Name 'C:\Program Files\Reemo\Reemo.exe' # Adjust the service name as needed
+    - name: Start Reemo Application
+      run: Start-Process -FilePath 'C:\Program Files\Reemo\Reemo.exe' # Start the Reemo application using the executable path
 
     - name: Run Tests
       run: npm test
