@@ -43,16 +43,16 @@ jobs:
     - name: Install Reemo
       run: .\reemo.setup.x64.exe /quiet /norestart
 
-    - name: Verify Reemo Installation
-      run: Get-Command remio-cli
+    - name: Locate Reemo Executable
+      run: Get-ChildItem -Path 'C:\' -Filter 'remio-cli.exe' -Recurse | Select-Object FullName
 
     - name: Configure Remio
-      run: C:\path\to\remio-cli\remio-cli config set --api-key $Env:REMIO_KEY
+      run: & "C:\path\to\remio-cli\remio-cli.exe" config set --api-key $Env:REMIO_KEY
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
 
     - name: Start Remio
-      run: C:\path\to\remio-cli\remio-cli start
+      run: & "C:\path\to\remio-cli\remio-cli.exe" start
 
     - name: Run Tests
       run: npm test
