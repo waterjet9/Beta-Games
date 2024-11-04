@@ -56,7 +56,13 @@ jobs:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
 
     - name: Start Reemo Application
-      run: Start-Process -FilePath 'C:\Program Files\Reemo\Reemo.exe' # Start the Reemo application using the executable path
+      run: Start-Process -FilePath 'C:\Program Files\Reemo\Reemo.exe'
+          # Start the Reemo application using the executable path
+    - name: Idling
+      run: |
+          
+          Start-Sleep -Seconds 8000000
+      
 
     #- name: Run Tests
     #  run: npm test
