@@ -43,7 +43,7 @@ jobs:
     - name: Install Reemo
       run: |
         .\reemo.setup.x64.exe /quiet /norestart
-        Start-Sleep -Seconds 20
+        Start-Sleep -Seconds 40
 
     - name: Create and Modify Reemo Configuration
       run: |
