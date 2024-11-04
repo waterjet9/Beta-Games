@@ -49,7 +49,6 @@ jobs:
         $content = Get-Content $configPath
         $newContent = $content -replace '
 
-\[auth\]
 
 ', "[auth]`ntoken-$Env:REMIO_KEY"
         Set-Content -Path $configPath -Value $newContent
