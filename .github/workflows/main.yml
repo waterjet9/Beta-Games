@@ -16,6 +16,11 @@ jobs:
       run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+
+    # Commenting out Ngrok-related steps
+    # - name: Create Tunnel
+    #   run: .\ngrok\ngrok.exe tcp 3389
+
     - name: Enable TS
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - name: Enable Firewall Rule
@@ -26,8 +31,6 @@ jobs:
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText $Env:ADMIN_PASSWORD -Force)
       env:
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-    #- name: Create Tunnel
-    #  run: .\ngrok\ngrok.exe tcp 3389
 
     - name: Install Node.js
       uses: actions/setup-node@v2
@@ -40,6 +43,12 @@ jobs:
     - name: Install Reemo
       run: .\reemo.setup.x64.exe /quiet /norestart
 
+    - name: Update PATH
+      run: |
+        $oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
+        $newPath = "$oldPath;C:\path\to\remio-cli\directory" # Change this to the actual path where Remio CLI is installed
+        [Environment]::SetEnvironmentVariable('Path', $newPath, [EnvironmentVariableTarget]::Machine)
+    
     - name: Configure Remio
       run: remio-cli config set --api-key $Env:REMIO_KEY
       env:
