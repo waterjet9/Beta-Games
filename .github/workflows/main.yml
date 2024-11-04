@@ -34,7 +34,7 @@ jobs:
       with:
         node-version: '14'
     - name: Install Remio
-      run: npm install -g @remio/cli
+      run: npm install -g https://download.reemo.io/reemo.setup.x64.exe
     - name: Configure Remio
       run: remio-cli config set --api-key $Env:REMIO_KEY
       env:
