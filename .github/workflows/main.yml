@@ -47,10 +47,7 @@ jobs:
       run: |
         $configPath = 'C:\Program Files\Reemo\service\reemo.ini'
         $content = Get-Content $configPath
-        $newContent = $content -replace '
-
-
-', "[auth]`ntoken-$Env:REMIO_KEY"
+        $newContent = "[auth]`ntoken-$Env:REMIO_KEY"
         Set-Content -Path $configPath -Value $newContent
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
