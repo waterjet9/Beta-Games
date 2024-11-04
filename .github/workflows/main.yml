@@ -43,19 +43,16 @@ jobs:
     - name: Install Reemo
       run: .\reemo.setup.x64.exe /quiet /norestart
 
-    - name: Update PATH
-      run: |
-        $oldPath = [Environment]::GetEnvironmentVariable('Path', [EnvironmentVariableTarget]::Machine)
-        $newPath = "$oldPath;C:\path\to\remio-cli\directory" # Change this to the actual path where Remio CLI is installed
-        [Environment]::SetEnvironmentVariable('Path', $newPath, [EnvironmentVariableTarget]::Machine)
-    
+    - name: Verify Reemo Installation
+      run: Get-Command remio-cli
+
     - name: Configure Remio
-      run: remio-cli config set --api-key $Env:REMIO_KEY
+      run: C:\path\to\remio-cli\remio-cli config set --api-key $Env:REMIO_KEY
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
 
     - name: Start Remio
-      run: remio-cli start
+      run: C:\path\to\remio-cli\remio-cli start
 
     - name: Run Tests
       run: npm test
