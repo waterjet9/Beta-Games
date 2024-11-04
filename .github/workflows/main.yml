@@ -8,14 +8,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    #- name: Download Ngrok
-    #  run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
-    #- name: Extract Ngrok
-     # run: Expand-Archive ngrok.zip
-    #- name: Ngrok Auth
-     # run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
-      #env:
-       # NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - name: Download Ngrok
+      run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
+    - name: Extract Ngrok
+      run: Expand-Archive ngrok.zip
+    - name: Ngrok Auth
+      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+      env:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
     - name: Enable TS
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - name: Enable Firewall Rule
@@ -26,20 +26,27 @@ jobs:
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText $Env:ADMIN_PASSWORD -Force)
       env:
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-    #- name: Create Tunnel
-     # run: .\ngrok\ngrok.exe tcp 3389
+    - name: Create Tunnel
+      run: .\ngrok\ngrok.exe tcp 3389
 
     - name: Install Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - name: Install Remio
-      run: npm install -g https://download.reemo.io/reemo.setup.x64.exe
+
+    - name: Download Reemo Setup
+      run: Invoke-WebRequest https://download.reemo.io/reemo.setup.x64.exe -OutFile reemo.setup.x64.exe
+    
+    - name: Install Reemo
+      run: .\reemo.setup.x64.exe /quiet /norestart
+
     - name: Configure Remio
       run: remio-cli config set --api-key $Env:REMIO_KEY
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
+
     - name: Start Remio
       run: remio-cli start
+
     - name: Run Tests
       run: npm test
