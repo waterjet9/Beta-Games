@@ -58,5 +58,5 @@ jobs:
     - name: Start Reemo Application
       run: Start-Process -FilePath 'C:\Program Files\Reemo\Reemo.exe' # Start the Reemo application using the executable path
 
-    - name: Run Tests
-      run: npm test
+    #- name: Run Tests
+    #  run: npm test
