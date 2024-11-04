@@ -54,7 +54,7 @@ jobs:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
 
     - name: Start Reemo Service
-      run: Start-Service -Name 'ReemoService' # Adjust the service name as needed
+      run: Start-Service -Name 'Reemo' # Adjust the service name as needed
 
     - name: Run Tests
       run: npm test
