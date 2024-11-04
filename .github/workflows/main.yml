@@ -16,14 +16,6 @@ jobs:
       run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-    
-    - name: Install Reemo
-      run: .\reemo.setup.x64.exe /quiet /norestart
-    
-    # Commenting out Ngrok-related steps
-     - name: Create Tunnel
-       run: .\ngrok\ngrok.exe tcp 3389
-
     - name: Enable TS
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - name: Enable Firewall Rule
@@ -34,28 +26,18 @@ jobs:
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText $Env:ADMIN_PASSWORD -Force)
       env:
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+    - name: Create Tunnel
+      run: .\ngrok\ngrok.exe tcp 3389
 
     - name: Install Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-
-    - name: Download Reemo Setup
-      run: Invoke-WebRequest https://download.reemo.io/reemo.setup.x64.exe -OutFile reemo.setup.x64.exe
-    
-    - name: Install Reemo
-      run: .\reemo.setup.x64.exe /quiet /norestart
-
-    - name: Locate Reemo Executable
-      run: Get-ChildItem -Path 'C:\' -Filter 'remio-cli.exe' -Recurse | Select-Object FullName
-
+    - name: Install Remio
+      run: npm install -g @remio/cli
     - name: Configure Remio
-      run: & "C:\path\to\remio-cli\remio-cli.exe" config set --api-key $Env:REMIO_KEY
-      env:
-        REMIO_KEY: ${{ secrets.REMIO_KEY }}
-
+      run: remio-cli config set <configuration-options>
     - name: Start Remio
-      run: & "C:\path\to\remio-cli\remio-cli.exe" start
-
+      run: remio-cli start
     - name: Run Tests
       run: npm test
