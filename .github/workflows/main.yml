@@ -49,12 +49,12 @@ jobs:
         if (-Not (Test-Path $configPath)) {
             New-Item -ItemType File -Path $configPath
         }
-        Add-Content -Path $configPath -Value "[auth]`ntoken-$Env:REMIO_KEY"
+        Add-Content -Path $configPath -Value "[auth]`token-$Env:REMIO_KEY"
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
 
     - name: Start Reemo Service
-      run: Start-Service -Name 'ReemoService' # Adjust the service name as needed
+      run: Start-Service -Name 'C://Program Files/Reemo/Reemo.exe' # Adjust the service name as needed
 
     - name: Run Tests
       run: npm test
