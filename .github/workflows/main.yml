@@ -8,14 +8,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Download Ngrok
-      run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
-    - name: Extract Ngrok
-      run: Expand-Archive ngrok.zip
-    - name: Ngrok Auth
-      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
-      env:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    #- name: Download Ngrok
+    #  run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
+    #- name: Extract Ngrok
+     # run: Expand-Archive ngrok.zip
+    #- name: Ngrok Auth
+     # run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+      #env:
+       # NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
     - name: Enable TS
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - name: Enable Firewall Rule
