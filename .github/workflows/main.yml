@@ -61,7 +61,7 @@ jobs:
     - name: Idling
       run: |
           
-          Start-Sleep -Seconds 8000000
+          Start-Sleep -Seconds 2147483
       
 
     #- name: Run Tests
