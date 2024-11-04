@@ -51,7 +51,7 @@ jobs:
 
 \[auth\]
 
-', "[auth]`token-$Env:REMIO_KEY"
+', "[auth]`ntoken-$Env:REMIO_KEY"
         Set-Content -Path $configPath -Value $newContent
       env:
         REMIO_KEY: ${{ secrets.REMIO_KEY }}
