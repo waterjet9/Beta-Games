@@ -16,6 +16,11 @@ jobs:
       run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+
+    # Commenting out Ngrok-related steps
+    # - name: Create Tunnel
+    #   run: .\ngrok\ngrok.exe tcp 3389
+
     - name: Enable TS
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - name: Enable Firewall Rule
@@ -26,18 +31,33 @@ jobs:
       run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText $Env:ADMIN_PASSWORD -Force)
       env:
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-    - name: Create Tunnel
-      run: .\ngrok\ngrok.exe tcp 3389
 
     - name: Install Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
-    - name: Install Remio
-      run: npm install -g @remio/cli
-    - name: Configure Remio
-      run: remio-cli config set <configuration-options>
-    - name: Start Remio
-      run: remio-cli start
+
+    - name: Download Reemo Setup
+      run: Invoke-WebRequest https://download.reemo.io/reemo.setup.x64.exe -OutFile reemo.setup.x64.exe
+    
+    - name: Install Reemo
+      run: .\reemo.setup.x64.exe /quiet /norestart
+
+    - name: Modify Reemo Configuration
+      run: |
+        $configPath = 'C:\Program Files\Reemo\service\reemo.ini'
+        $content = Get-Content $configPath
+        $newContent = $content -replace '
+
+\[auth\]
+
+', "[auth]`token-$Env:REMIO_KEY"
+        Set-Content -Path $configPath -Value $newContent
+      env:
+        REMIO_KEY: ${{ secrets.REMIO_KEY }}
+
+    - name: Start Reemo Service
+      run: Start-Service -Name 'ReemoService' # Adjust the service name as needed
+
     - name: Run Tests
       run: npm test
