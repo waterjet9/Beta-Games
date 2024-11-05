@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Download Remote-RTC
-  run: curl -L -o Remote-RTC.zip https://github.com/DigitalSerpant/Remote-RTC/releases/download/1.0.1/Remote.RTC.1.0.1.zip 
+      run: curl -L -o Remote-RTC.zip https://github.com/DigitalSerpant/Remote-RTC/releases/download/1.0.1/Remote.RTC.1.0.1.zip
     
     - name: Extract Remote-RTC
       run: Expand-Archive Remote-RTC.zip
