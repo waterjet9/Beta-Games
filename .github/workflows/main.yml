@@ -51,23 +51,23 @@ jobs:
       run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru
     
     - name: Create Tunnel (Port 6966)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966" -NoNewWindow -PassThru
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966 --log=stdout" -NoNewWindow -PassThru
 
     - name: Create Tunnel (Port 3389)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow -PassThru
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389 --log=stdout" -NoNewWindow -PassThru
 
     - name: Wait for Ngrok
       run: Start-Sleep -Seconds 10
 
     - name: Display Ngrok URL (Port 6966)
       run: |
-        $ngrok_6966 = .\ngrok\ngrok.exe tunnels
+        $ngrok_6966 = .\ngrok\ngrok.exe api tunnels
         $url_6966 = $ngrok_6966 | ConvertFrom-Json | Select-Object -ExpandProperty tunnels | Where-Object { $_.config.addr -eq 'tcp://localhost:6966' } | Select-Object -ExpandProperty public_url
         Write-Host "Ngrok URL for Port 6966: $url_6966"
 
     - name: Display Ngrok URL (Port 3389)
       run: |
-        $ngrok_3389 = .\ngrok\ngrok.exe tunnels
+        $ngrok_3389 = .\ngrok\ngrok.exe api tunnels
         $url_3389 = $ngrok_3389 | ConvertFrom-Json | Select-Object -ExpandProperty tunnels | Where-Object { $_.config.addr -eq 'tcp://localhost:3389' } | Select-Object -ExpandProperty public_url
         Write-Host "Ngrok URL for Port 3389: $url_3389"
       
