@@ -51,7 +51,7 @@ jobs:
       run: Start-Process -FilePath "Remote-RTC\main.exe" 
     
     - name: Create Tunnel (Port 3389)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow -PassThru
+      run: .\ngrok\ngrok.exe tcp 3389
     
     # You can uncomment the following line if you want to create another tunnel for port 6966
     # - name: Create Tunnel (Port 6966)
