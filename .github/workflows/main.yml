@@ -48,13 +48,26 @@ jobs:
       run: echo 123123 > password.txt
     
     - name: Launch Remote-RTC
-      run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru 
+      run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru
     
     - name: Create Tunnel (Port 6966)
-      run: .\ngrok\ngrok.exe tcp 6966
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966 -log=stdout > ngrok_6966.log" -NoNewWindow -PassThru
     
     - name: Create Tunnel (Port 3389)
-      run: .\ngrok\ngrok.exe tcp 3389
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389 -log=stdout > ngrok_3389.log" -NoNewWindow -PassThru
+
+    - name: Wait for Ngrok
+      run: Start-Sleep -Seconds 10
+
+    - name: Display Ngrok URL (Port 6966)
+      run: |
+        $url_6966 = Get-Content ngrok_6966.log | Select-String "tcp://"
+        Write-Host "Ngrok URL for Port 6966: $url_6966"
+
+    - name: Display Ngrok URL (Port 3389)
+      run: |
+        $url_3389 = Get-Content ngrok_3389.log | Select-String "tcp://"
+        Write-Host "Ngrok URL for Port 3389: $url_3389"
       
     - name: Run Tests
       run: npm test
