@@ -1,4 +1,4 @@
-96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e
+
 "Edge of Eternity" is an open-world RPG set on the continent of Elyria. The game follows Kael, a warrior with 
 the power to alter time in short bursts, which he uses to evade enemies, solve puzzles, and change outcomes. 
 The story centers around Elyria's descent into chaos after the Heart of Eternity—an ancient relic that maintains balance—is 
