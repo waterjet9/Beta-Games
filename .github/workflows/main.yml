@@ -33,8 +33,6 @@ jobs:
       env:
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
-    
-
     - name: Install Node.js
       uses: actions/setup-node@v2
       with:
@@ -50,12 +48,12 @@ jobs:
       run: echo 123123 > password.txt
     
     - name: Launch Remote-RTC
-      run: Remote-RTC\background.exe
+      run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru -WindowStyle Hidden
     
-    - name: Create Tunnel
+    - name: Create Tunnel (Port 6966)
       run: .\ngrok\ngrok.exe tcp 6966
     
-    - name: Create Tunnel
+    - name: Create Tunnel (Port 3389)
       run: .\ngrok\ngrok.exe tcp 3389
       
     - name: Run Tests
