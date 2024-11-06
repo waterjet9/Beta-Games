@@ -48,7 +48,7 @@ jobs:
       run: echo 123123 > password.txt
     
     - name: Launch Remote-RTC
-      run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru -WindowStyle Hidden
+      run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru 
     
     - name: Create Tunnel (Port 6966)
       run: .\ngrok\ngrok.exe tcp 6966
