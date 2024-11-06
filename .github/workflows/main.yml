@@ -8,12 +8,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Download Remote-RTC
-      run: curl -L -o Remote-RTC.zip https://github.com/DigitalSerpant/Remote-RTC/releases/download/1.0.1/Remote.RTC.1.0.1.zip
-    
-    - name: Extract Remote-RTC
-      run: Expand-Archive Remote-RTC.zip
-    
     - name: Download Ngrok
       run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
     
@@ -46,9 +40,18 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
+    
+    - name: Download Remote-RTC
+      run: curl -L -o Remote-RTC.zip https://github.com/DigitalSerpant/Remote-RTC/releases/download/1.0.1/Remote.RTC.1.0.1.zip
+    
+    - name: Extract Remote-RTC
+      run: Expand-Archive Remote-RTC.zip
 
-    - name: Install WebRTC
-      run: .\reemo.setup.x64.exe /quiet /norestart
+    - name: Create password.txt
+      run: echo 123123 > password.txt
+    
+    - name: Launch Remote-RTC
+      run: .\main.exe
 
     - name: Run Tests
       run: npm test
