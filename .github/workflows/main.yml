@@ -57,7 +57,7 @@ jobs:
       run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow -PassThru
       
     - name: Wait for Ngrok
-      run: Start-Sleep -Seconds 10
+      run: Start-Sleep -Seconds 274040
 
     - name: Run Tests
       run: npm test
