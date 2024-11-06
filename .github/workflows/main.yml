@@ -33,8 +33,7 @@ jobs:
       env:
         ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
-    - name: Create Tunnel
-      run: .\ngrok\ngrok.exe tcp 3389
+    
 
     - name: Install Node.js
       uses: actions/setup-node@v2
@@ -52,6 +51,9 @@ jobs:
     
     - name: Launch Remote-RTC
       run: .\main.exe
-
+    
+    - name: Create Tunnel
+      run: .\ngrok\ngrok.exe tcp 3389
+      
     - name: Run Tests
       run: npm test
