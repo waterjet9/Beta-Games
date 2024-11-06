@@ -48,14 +48,14 @@ jobs:
       run: echo 123123 > password.txt
     
     - name: Launch Remote-RTC
-      run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru
+      run: Start-Process -FilePath "Remote-RTC\main.exe" 
     
     - name: Create Tunnel (Port 3389)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe #-ArgumentList "tcp 3389 --log=stdout" -NoNewWindow -PassThru
-      
-      #run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966 --log=stdout" -NoNewWindow -PassThru
-
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow -PassThru
     
+    # You can uncomment the following line if you want to create another tunnel for port 6966
+    # - name: Create Tunnel (Port 6966)
+    #   run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966" -NoNewWindow -PassThru
 
     - name: Wait for Ngrok
       run: Start-Sleep -Seconds 10
