@@ -50,7 +50,7 @@ jobs:
       run: echo 123123 > password.txt
     
     - name: Launch Remote-RTC
-      run: Remote-RTC\main.exe
+      run: Remote-RTC\background.exe
     
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 6966
