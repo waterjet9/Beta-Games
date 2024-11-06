@@ -51,7 +51,7 @@ jobs:
       run: Start-Process -FilePath "Remote-RTC\main.exe" -NoNewWindow -PassThru
     
     - name: Create Tunnel (Port 3389) 
-      run: .\ngrok\ngrok.exe tcp 3389
+      run: .\ngrok\ngrok.exe tcp 6969
     
     - name: Wait for Ngrok
       run: Start-Sleep -Seconds 274040
