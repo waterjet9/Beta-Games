@@ -51,8 +51,9 @@ jobs:
       run: Start-Process -FilePath "Remote-RTC\background.exe" -NoNewWindow -PassThru
     
     - name: Create Tunnel (Port 3389)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389 --log=stdout" 
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966 --log=stdout" -NoNewWindow -PassThru
+      run: Start-Process -FilePath .\ngrok\ngrok.exe #-ArgumentList "tcp 3389 --log=stdout" -NoNewWindow -PassThru
+      
+      #run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966 --log=stdout" -NoNewWindow -PassThru
 
     
 
