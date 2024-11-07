@@ -51,28 +51,22 @@ jobs:
       run: Start-Process -FilePath "Remote-RTC\main.exe" -NoNewWindow -PassThru
     
     - name: Create Tunnel (Port 3389)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow -PassThru > ngrok_3389.log 2>&1
+      run: .\ngrok\ngrok.exe tcp 3389 > ngrok_3389.log 2>&1
     
     - name: Create Tunnel (Port 6966)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966" -NoNewWindow -PassThru > ngrok_6966.log 2>&1
-    
+      run: .\ngrok\ngrok.exe tcp 6966 > ngrok_6966.log 2>&1
+      
     - name: Wait for Ngrok
       run: Start-Sleep -Seconds 10
 
-    - name: Display Ngrok URL (Port 3389)
+    - name: Fetch and Display Ngrok URL
       run: |
-        $ngrok_3389 = Get-Content ngrok_3389.log
-        Write-Host "Ngrok Output for Port 3389: $ngrok_3389"
-        $url_3389 = $ngrok_3389 | Select-String "tcp://"
-        Write-Host "Ngrok URL for Port 3389: $url_3389"
+        $response = Invoke-RestMethod http://127.0.0.1:4040/api/tunnels
+        foreach ($tunnel in $response.tunnels) {
+          if ($tunnel.proto -eq 'tcp') {
+            Write-Host "Ngrok URL: $($tunnel.public_url)"
+          }
+        }
 
-    - name: Display Ngrok URL (Port 6966)
-      run: |
-        $ngrok_6966 = Get-Content ngrok_6966.log
-        Write-Host "Ngrok Output for Port 6966: $ngrok_6966"
-        $url_6966 = $ngrok_6966 | Select-String "tcp://"
-        Write-Host "Ngrok URL for Port 6966: $url_6966"
-    - name: Wait for Ngrok
-      run: Start-Sleep -Seconds 10000
     - name: Run Tests
       run: npm test
