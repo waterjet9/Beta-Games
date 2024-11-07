@@ -49,12 +49,12 @@ jobs:
     
     - name: Launch Remote-RTC
       run: Start-Process -FilePath "Remote-RTC\main.exe" -NoNewWindow -PassThru
-    
-    - name: Create Tunnel (Port 3389)
-      run: .\ngrok\ngrok.exe tcp 3389 > ngrok_3389.log 2>&1
-    
+
+    - name: Create Tunnel (Port 6969)
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6969" -NoNewWindow -PassThru -RedirectStandardOutput ngrok_6969.log
+
     - name: Create Tunnel (Port 6966)
-      run: .\ngrok\ngrok.exe tcp 6966 > ngrok_6966.log 2>&1
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966" -NoNewWindow -PassThru -RedirectStandardOutput ngrok_6966.log
       
     - name: Wait for Ngrok
       run: Start-Sleep -Seconds 10
