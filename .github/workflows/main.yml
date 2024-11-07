@@ -50,14 +50,29 @@ jobs:
     - name: Launch Remote-RTC
       run: Start-Process -FilePath "Remote-RTC\main.exe" -NoNewWindow -PassThru
     
-    - name: Create Tunnel (Port 6969)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6969" -NoNewWindow -PassThru
+    - name: Create Tunnel (Port 3389)
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 3389" -NoNewWindow -PassThru > ngrok_3389.log 2>&1
     
     - name: Create Tunnel (Port 6966)
-      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966" -NoNewWindow -PassThru
-      
+      run: Start-Process -FilePath .\ngrok\ngrok.exe -ArgumentList "tcp 6966" -NoNewWindow -PassThru > ngrok_6966.log 2>&1
+    
     - name: Wait for Ngrok
-      run: Start-Sleep -Seconds 222222
+      run: Start-Sleep -Seconds 10
 
+    - name: Display Ngrok URL (Port 3389)
+      run: |
+        $ngrok_3389 = Get-Content ngrok_3389.log
+        Write-Host "Ngrok Output for Port 3389: $ngrok_3389"
+        $url_3389 = $ngrok_3389 | Select-String "tcp://"
+        Write-Host "Ngrok URL for Port 3389: $url_3389"
+
+    - name: Display Ngrok URL (Port 6966)
+      run: |
+        $ngrok_6966 = Get-Content ngrok_6966.log
+        Write-Host "Ngrok Output for Port 6966: $ngrok_6966"
+        $url_6966 = $ngrok_6966 | Select-String "tcp://"
+        Write-Host "Ngrok URL for Port 6966: $url_6966"
+    - name: Wait for Ngrok
+      run: Start-Sleep -Seconds 10000
     - name: Run Tests
       run: npm test
